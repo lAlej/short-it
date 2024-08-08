@@ -1,5 +1,5 @@
 import { IconButton, Snackbar } from "@mui/material";
-import CloseIcon from '@mui/icons-material/Close';
+import React from "react";
 
 interface Props {
   message: string;
@@ -7,25 +7,33 @@ interface Props {
   handleClose: () => void;
 }
 export const Toast = ({ message, open, handleClose }: Props) => {
+  const [handleOpen, setHandleOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    if (open) {
+      setHandleOpen(open);
+      setTimeout(() => {
+        setHandleOpen(false);
+        handleClose();
+      }, 3000);
+    }
+  }, [open]);
+
   return (
     <Snackbar
       anchorOrigin={{
         vertical: "top",
         horizontal: "center",
       }}
-      open={open}
+      open={handleOpen}
       autoHideDuration={3000}
-      onClose={handleClose}
       message={message}
       action={
         <IconButton
           size="small"
           aria-label="close"
           color="inherit"
-          onClick={handleClose}
-        >
-          <CloseIcon fontSize="small" />
-        </IconButton>
+        ></IconButton>
       }
     />
   );
