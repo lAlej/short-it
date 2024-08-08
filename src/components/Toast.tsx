@@ -1,5 +1,5 @@
 import { IconButton, Snackbar } from "@mui/material";
-import CloseIcon from "@mui/icons-material/close";
+import CloseIcon from '@mui/icons-material/Close';
 
 interface Props {
   message: string;
