@@ -15,7 +15,6 @@ export const createUrl = async (url: string) => {
 export const getUrl = async (url: string) => {
 
 
-  console.log(url)
   const data = await fetch("/api/getUrl", {
     method: "POST",
     headers: {

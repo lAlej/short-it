@@ -8,12 +8,11 @@ const Page = ({ params }: { params: { url: string } }) => {
 
   React.useEffect(() => {
     const redirectTo = async () => {
-      const data = await getUrl(params.url);
+      try {
+        const data = await getUrl(params.url);
 
-      if (data && data.url) {
         router.replace(data.url);
-      } else {
-        console.log("No existe el enlace");
+      } catch (error) {
         router.replace("/");
       }
     };
