@@ -8,6 +8,15 @@ export async function POST(req) {
   const body = await req.json();
   const newCode = uuid.substring(0, 8);
 
+  
+  console.log(body.key)
+
+  if (!body.key || body.key !== process.env.NEXT_PUBLIC_API_KEY) {
+    return new Error(JSON.stringify("INVALID API_KEY"), {
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
   const newUrl = await prisma.url.create({
     data: {
       url: body.url,

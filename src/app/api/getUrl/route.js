@@ -5,6 +5,13 @@ const prisma = new PrismaClient();
 export async function POST(req) {
   const body = await req.json();
 
+
+  if (!body.key || body.key !== process.env.NEXT_PUBLIC_API_KEY) {
+    return new Error(JSON.stringify("INVALID API_KEY"), {
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
   const urls = await prisma.url.findMany({
     where: {
       urlCode: body.url,
