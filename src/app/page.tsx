@@ -58,6 +58,26 @@ export default function Home() {
       });
     }
   };
+
+  const handleClipboard = () => {
+    const url = `${process.env.NEXT_PUBLIC_HOST_URL}/${newUrl}`;
+
+    navigator.clipboard
+      .writeText(url)
+      .then(() => {
+        return setOpenToast((prev) => {
+          let prevData = { ...prev };
+          prevData.open = true;
+          prevData.message = "Copied to Clipboard";
+
+          return prevData;
+        });
+      })
+      .catch((err) => {
+        console.error("Error to clipboard: ", err);
+      });
+  };
+
   return (
     <Grid
       item
@@ -106,27 +126,42 @@ export default function Home() {
         </Button>
       </Grid>
       <Loading isLoading={loading} />
-      <Grid item>
+      <Grid
+        item
+        container
+        sx={{
+          flexDirection: { xs: "column", sm: "row" },
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 3,
+          // display: newUrl !== "" ? "flex" : "none",
+        }}
+      >
         <Typography
           style={{
             fontWeight: "bold",
             fontSize: 25,
-            display: newUrl !== "" ? "flex" : "none",
             transition: "all 1s",
           }}
         >
           New Url:{" "}
-          <Link
-            style={{
-              fontStyle: "none",
-              color: "#C5705D",
-              fontWeight: "lighter",
-            }}
-            href={`/${newUrl}`}
-          >
-            Click here
-          </Link>
         </Typography>
+        <Button
+          style={{ height: 40 }}
+          variant="outlined"
+          onClick={() => handleClipboard()}
+          sx={{
+            color: "#C5705D",
+            borderColor: "#C5705D",
+            "&:hover": {
+              backgroundColor: "#C5705D",
+              borderColor: "#FFF",
+              color: "#FFF",
+            },
+          }}
+        >
+          Copy to Clipboard
+        </Button>
       </Grid>
       <Toast
         message={openToast.message}
