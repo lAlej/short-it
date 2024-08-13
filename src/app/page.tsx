@@ -134,7 +134,7 @@ export default function Home() {
           alignItems: "center",
           justifyContent: "center",
           gap: 3,
-          // display: newUrl !== "" ? "flex" : "none",
+          display: newUrl !== "" ? "flex" : "none",
         }}
       >
         <Typography
