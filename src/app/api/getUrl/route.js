@@ -7,7 +7,7 @@ export async function POST(req) {
 
 
   if (!body.key || body.key !== process.env.NEXT_PUBLIC_API_KEY) {
-    return new Error(JSON.stringify("INVALID API_KEY"), {
+    return new Response(JSON.stringify("INVALID API_KEY"), {
       headers: { "Content-Type": "application/json" },
     });
   }
