@@ -1,15 +1,24 @@
 "use client";
 
+import React from "react";
 import { Button, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Tooltip } from "@mui/material";
 import { Toast } from "@/components/Toast";
-import React from "react";
 
 export const SavedUrls = () => {
-  const savedUrls = window.localStorage.getItem("savedUrls");
+  const [savedUrlsArray, setSavedUrlsArray] = React.useState<{ url: string; urlCode: string }[]>([]);
   const [openToast, setOpenToast] = React.useState({
     message: "",
     open: false,
   });
+
+  React.useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedUrls = window.localStorage.getItem("savedUrls");
+      if (savedUrls) {
+        setSavedUrlsArray(JSON.parse(savedUrls));
+      }
+    }
+  }, []);
 
   const handleToast = () => {
     setOpenToast((prev) => {
@@ -19,15 +28,13 @@ export const SavedUrls = () => {
     });
   };
 
-  if (!savedUrls) return null;
-
-  const savedUrlsArray = JSON.parse(savedUrls);
-
   // Helper to truncate long URLs
   const truncateUrl = (url: string, maxLength = 32) => {
     if (url.length <= maxLength) return url;
     return url.slice(0, maxLength - 3) + '...';
   };
+
+  if (!savedUrlsArray.length) return null;
 
   return (
     <TableContainer component={Paper} sx={{ mt: 4, borderRadius: 'var(--radius)', boxShadow: 'var(--shadow)', background: '#fff', maxWidth: 600, mx: 'auto' }}>
@@ -40,7 +47,7 @@ export const SavedUrls = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {savedUrlsArray.map(({ url, urlCode }: { url: string; urlCode: string }, index: number) => (
+          {savedUrlsArray.map(({ url, urlCode }, index) => (
             <TableRow key={index}>
               <TableCell>
                 <Tooltip title={url} arrow>
