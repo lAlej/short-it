@@ -9,6 +9,7 @@ import { TextFieldCustom } from "@/components/TextFieldCustom";
 import { validateUrl } from "./util/validateUrl";
 import { Loading } from "@/components/Loading";
 import { Toast } from "@/components/Toast";
+import { SavedUrls } from "@/components/SavedUrls";
 
 export default function Home() {
   const [url, setUrl] = React.useState<string>("");
@@ -60,7 +61,8 @@ export default function Home() {
   };
 
   const handleClipboard = () => {
-    const url = `${process.env.NEXT_PUBLIC_HOST_URL}/${newUrl}`;
+    const savedUrls = window.localStorage.getItem("savedUrls");
+    const savedUrlsArray = savedUrls ? JSON.parse(savedUrls) : [];
 
     navigator.clipboard
       .writeText(url)
@@ -76,6 +78,8 @@ export default function Home() {
       .catch((err) => {
         console.error("Error to clipboard: ", err);
       });
+
+    window.localStorage.setItem("savedUrls", JSON.stringify([...savedUrlsArray, { url, urlCode: newUrl }]));
   };
 
   return (
@@ -88,16 +92,27 @@ export default function Home() {
       alignItems={"center"}
       justifyContent={"center"}
       gap={5}
+      sx={{ background: '#fff', borderRadius: 'var(--radius)', boxShadow: 'var(--shadow)', p: { xs: 2, sm: 4 }, maxWidth: 600, mx: 'auto' }}
     >
       <Typography
         style={{
-          fontWeight: "bold",
-          fontSize: 50,
-          color: "#C5705D",
+          fontWeight: 700,
+          fontSize: 54,
+          color: "var(--accent)",
           textAlign: "center",
+          letterSpacing: -1,
+          marginBottom: 8,
         }}
       >
         Url Shortener
+        <span style={{
+          display: 'block',
+          width: 60,
+          height: 6,
+          background: 'var(--accent)',
+          borderRadius: 3,
+          margin: '12px auto 0',
+        }} />
       </Typography>
       <Grid
         item
@@ -109,17 +124,19 @@ export default function Home() {
       >
         <TextFieldCustom onChange={(e) => setUrl(e)} />
         <Button
-          style={{ height: 50 }}
-          variant="outlined"
+          style={{ height: 50, borderRadius: 'var(--radius)', fontWeight: 600, fontSize: 18 }}
+          variant="contained"
           onClick={() => sendUrl()}
           sx={{
-            color: "#C5705D",
-            borderColor: "#C5705D",
-            "&:hover": {
-              backgroundColor: "#C5705D",
-              borderColor: "#FFF",
-              color: "#FFF",
+            background: "var(--accent)",
+            color: "#fff",
+            boxShadow: 'var(--shadow)',
+            px: 4,
+            '&:hover': {
+              background: "var(--accent-dark)",
+              color: '#fff',
             },
+            transition: 'all 0.2s',
           }}
         >
           Shorten URL
@@ -139,30 +156,34 @@ export default function Home() {
       >
         <Typography
           style={{
-            fontWeight: "bold",
-            fontSize: 25,
+            fontWeight: 600,
+            fontSize: 22,
+            color: '#222',
             transition: "all 1s",
           }}
         >
-          New Url:{" "}
+          New Url:
         </Typography>
         <Button
-          style={{ height: 40 }}
-          variant="outlined"
+          style={{ height: 40, borderRadius: 'var(--radius)', fontWeight: 500 }}
+          variant="contained"
           onClick={() => handleClipboard()}
           sx={{
-            color: "#C5705D",
-            borderColor: "#C5705D",
-            "&:hover": {
-              backgroundColor: "#C5705D",
-              borderColor: "#FFF",
-              color: "#FFF",
+            background: "var(--accent)",
+            color: "#fff",
+            boxShadow: 'var(--shadow)',
+            px: 3,
+            '&:hover': {
+              background: "var(--accent-dark)",
+              color: '#fff',
             },
+            transition: 'all 0.2s',
           }}
         >
           Copy to Clipboard
         </Button>
       </Grid>
+      <SavedUrls />
       <Toast
         message={openToast.message}
         open={openToast.open}

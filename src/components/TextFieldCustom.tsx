@@ -1,25 +1,34 @@
 import { styled, TextField } from "@mui/material";
 
 const CustomTextField = styled(TextField)({
-  "& .MuiInputBase-input": {
-    width: "100vw",
-    height: "50px",
-    boxSizing: "border-box",
-    padding: "0 14px",
-    display: "flex",
-    alignItems: "center",
+  '& .MuiInputBase-input': {
+    height: '50px',
+    fontSize: '1.1rem',
+    padding: '0 14px',
+    background: '#fff',
+    borderRadius: 'var(--radius)',
+    boxShadow: 'var(--shadow)',
+    transition: 'box-shadow 0.2s',
   },
-  "& .MuiOutlinedInput-root": {
-    "&:hover fieldset": {
-      borderColor: "#C5705D",
+  '& .MuiOutlinedInput-root': {
+    borderRadius: 'var(--radius)',
+    '& fieldset': {
+      borderColor: 'var(--accent-light)',
+      borderWidth: 2,
     },
-    "&.Mui-focused fieldset": {
-      borderColor: "#C5705D",
+    '&:hover fieldset': {
+      borderColor: 'var(--accent)',
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: 'var(--accent)',
+      boxShadow: '0 0 0 2px var(--accent-light)',
     },
   },
-  "& .MuiInputLabel-root": {
-    "&.Mui-focused": {
-      color: "#C5705D",
+  '& .MuiInputLabel-root': {
+    fontWeight: 500,
+    color: '#888',
+    '&.Mui-focused': {
+      color: 'var(--accent)',
     },
   },
 });

@@ -27,12 +27,20 @@ export const Toast = ({ message, open, handleClose }: Props) => {
       }}
       open={handleOpen}
       autoHideDuration={3000}
-      message={message}
+      message={<span style={{ color: '#fff', fontWeight: 600 }}>{message}</span>}
+      ContentProps={{
+        sx: {
+          background: 'var(--accent)',
+          borderRadius: 'var(--radius)',
+          boxShadow: 'var(--shadow)',
+          px: 3,
+        },
+      }}
       action={
         <IconButton
           size="small"
           aria-label="close"
-          color="inherit"
+          sx={{ color: '#fff' }}
         ></IconButton>
       }
     />

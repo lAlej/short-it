@@ -11,10 +11,12 @@ export const Loading = ({ isLoading }: Props) => {
         display: isLoading ? "flex" : "none",
         justifyContent: "center",
         alignItems: "center",
-        height: "10px",
+        height: "40px",
+        width: '100%',
+        my: 2,
       }}
     >
-      <CircularProgress style={{ color: "#C5705D" }} />
+      <CircularProgress style={{ color: "var(--accent)", width: 40, height: 40 }} />
     </Box>
   );
 };
