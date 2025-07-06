@@ -16,5 +16,5 @@ datasource db {
 model Url {
   id                      Int       @id @default(autoincrement())
   url                     String    
-  urlCode                 String
+  urlCode                 String    @unique
 }

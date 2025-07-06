@@ -1,102 +1,83 @@
 "use client";
 
 import React from "react";
-import { Button, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Tooltip } from "@mui/material";
-import { Toast } from "@/components/Toast";
+import { Grid, Typography } from "@mui/material";
+import { ShortenerInfo } from "./ShortenerInfo";
+import InsertLinkIcon from "@mui/icons-material/InsertLink";
 
-export const SavedUrls = () => {
-  const [savedUrlsArray, setSavedUrlsArray] = React.useState<{ url: string; urlCode: string }[]>([]);
-  const [openToast, setOpenToast] = React.useState({
-    message: "",
-    open: false,
-  });
+interface SavedUrlsProps {
+  urls: { url: string; urlCode: string }[];
+}
 
-  React.useEffect(() => {
-    if (typeof window !== "undefined") {
-      const savedUrls = window.localStorage.getItem("savedUrls");
-      if (savedUrls) {
-        setSavedUrlsArray(JSON.parse(savedUrls));
-      }
-    }
-  }, []);
+const SavedUrlsComponent = ({ urls }: SavedUrlsProps) => {
+  return urls.length > 0 ? (
+    <Grid
+      padding={4}
+      gap={2}
+      sx={{
+        width: "100%",
+        backgroundColor: "var(--primary-darker)",
+        border: "1px solid var(--background-secondary)",
+        borderRadius: "var(--radius)",
+        boxShadow: "0 0 10px 0 rgba(0, 0, 0, 0.1)",
+        maxHeight: 450,
+      }}
+    >
+      <Typography
+        fontWeight={600}
+        fontSize={18}
+        borderBottom={"1px solid var(--background-secondary)"}
+        paddingBottom={2}
+      >
+        Your Shortened URLs
+      </Typography>
 
-  const handleToast = () => {
-    setOpenToast((prev) => {
-      let prevData = { ...prev };
-      prevData.open = false;
-      return prevData;
-    });
-  };
-
-  // Helper to truncate long URLs
-  const truncateUrl = (url: string, maxLength = 32) => {
-    if (url.length <= maxLength) return url;
-    return url.slice(0, maxLength - 3) + '...';
-  };
-
-  if (!savedUrlsArray.length) return null;
-
-  return (
-    <TableContainer component={Paper} sx={{ mt: 4, borderRadius: 'var(--radius)', boxShadow: 'var(--shadow)', background: '#fff', maxWidth: 600, mx: 'auto' }}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell sx={{ fontWeight: 700, color: 'var(--accent)', fontSize: 18 }}>Original URL</TableCell>
-            <TableCell sx={{ fontWeight: 700, color: 'var(--accent)', fontSize: 18 }}>Short URL</TableCell>
-            <TableCell sx={{ fontWeight: 700, color: 'var(--accent)', fontSize: 18 }} align="right">Action</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {savedUrlsArray.map(({ url, urlCode }, index) => (
-            <TableRow key={index}>
-              <TableCell>
-                <Tooltip title={url} arrow>
-                  <span style={{ cursor: 'pointer', fontSize: 15 }}>{truncateUrl(url)}</span>
-                </Tooltip>
-              </TableCell>
-              <TableCell>
-                <Tooltip title={`${process.env.NEXT_PUBLIC_HOST_URL}/${urlCode}`} arrow>
-                  <span style={{ cursor: 'pointer', color: 'var(--accent)', fontWeight: 500, fontSize: 15 }}>{truncateUrl(`${process.env.NEXT_PUBLIC_HOST_URL}/${urlCode}`, 28)}</span>
-                </Tooltip>
-              </TableCell>
-              <TableCell align="right">
-                <Button
-                  style={{ height: 36, borderRadius: 'var(--radius)', fontWeight: 500 }}
-                  variant="contained"
-                  onClick={() => {
-                    navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_HOST_URL}/${urlCode}`);
-                    setOpenToast((prev) => {
-                      let prevData = { ...prev };
-                      prevData.open = true;
-                      prevData.message = "Copied to Clipboard";
-                      return prevData;
-                    });
-                  }}
-                  sx={{
-                    background: "var(--accent)",
-                    color: "#fff",
-                    boxShadow: 'var(--shadow)',
-                    px: 2,
-                    minWidth: 0,
-                    '&:hover': {
-                      background: "var(--accent-dark)",
-                      color: '#fff',
-                    },
-                    transition: 'all 0.2s',
-                  }}
-                >
-                  Copy
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      <Toast
-        message={openToast.message}
-        open={openToast.open}
-        handleClose={handleToast}
-      />
-    </TableContainer>
+      <Grid sx={{ overflowY: "auto", maxHeight: 350, width: "100%" }}>
+        {urls.map((url) => (
+          <ShortenerInfo
+            key={url.urlCode}
+            urlCode={url.urlCode}
+            originalUrl={url.url}
+          />
+        ))}
+      </Grid>
+    </Grid>
+  ) : (
+    <Grid
+      container
+      direction={"column"}
+      justifyContent={"center"}
+      alignItems={"center"}
+      padding={4}
+      gap={2}
+      width={"100%"}
+    >
+      <Grid
+        container
+        justifyItems={"center"}
+        alignItems={"center"}
+        justifyContent={"center"}
+        width={100}
+        height={100}
+        borderRadius={"100%"}
+        sx={{
+          backgroundColor: "var(--primary-darker)",
+        }}
+      >
+        <InsertLinkIcon
+          sx={{
+            color: "var(--text-secondary)",
+            rotate: "-45deg",
+            width: 55,
+            height: 55,
+          }}
+        />
+      </Grid>
+      <Typography fontSize={18} color={"var(--text-secondary)"}>
+        No URLs saved
+      </Typography>
+    </Grid>
   );
 };
+
+export const SavedUrls = React.memo(SavedUrlsComponent);

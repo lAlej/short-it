@@ -1,25 +1,49 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap");
 
 * {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
-  font-family: 'Inter', Arial, sans-serif;
+  font-family: "Inter", Arial, sans-serif;
 }
 
 html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
-  background-color: #fff;
-  color: #222;
+  color: var(--text-primary);
   transition: background 0.3s, color 0.3s;
 }
 
 :root {
-  --accent: #FF6B35;
-  --accent-dark: #C63D16;
-  --accent-light: #FFD6C0;
-  --radius: 14px;
-  --shadow: 0 2px 16px 0 rgba(0,0,0,0.07);
+  --background-primary: #0f1729;
+  --background-secondary: #2a3343;
+  --background-tertiary: #9ca3af;
+
+  --text-primary: #fff;
+  --text-secondary: #9ca3af;
+
+  --primary: #182030;
+  --primary-light: #93c5fd;
+  --primary-dark: #1e40af;
+  --primary-darker: #192232;
+  --primary-accent: #1f3457;
+
+  --blue: #2b60eb;
+  --blue-light: #93c5fd;
+  --blue-dark: #1e40af;
+
+  --success: #07da07;
+  --success-light: rgb(98, 230, 98);
+
+  --purple: #9234ea;
+  --purple-secondary: #6647eb;
+  --purple-dark: #7e22ce;
+
+  --accent: #ff6b35;
+  --accent-dark: #c63d16;
+  --accent-light: #ffd6c0;
+
+  --radius: 8px;
+  --shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.07);
 }

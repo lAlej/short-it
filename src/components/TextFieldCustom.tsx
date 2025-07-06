@@ -1,50 +1,73 @@
-import { styled, TextField } from "@mui/material";
+import { IconButton, InputAdornment, styled, TextField } from "@mui/material";
+import { Link as LinkIcon } from "@mui/icons-material";
 
 const CustomTextField = styled(TextField)({
-  '& .MuiInputBase-input': {
-    height: '50px',
-    fontSize: '1.1rem',
-    padding: '0 14px',
-    background: '#fff',
-    borderRadius: 'var(--radius)',
-    boxShadow: 'var(--shadow)',
-    transition: 'box-shadow 0.2s',
+  "& .MuiInputBase-input": {
+    height: "55px",
+    fontSize: "0.9rem",
+    padding: "0 14px",
+    background: "var(--background-secondary)",
+    borderRadius: "var(--radius)",
+    boxShadow: "var(--shadow)",
+    transition: "box-shadow 0.2s",
   },
-  '& .MuiOutlinedInput-root': {
-    borderRadius: 'var(--radius)',
-    '& fieldset': {
-      borderColor: 'var(--accent-light)',
-      borderWidth: 2,
+  "& .MuiOutlinedInput-root": {
+    backgroundColor: "var(--background-secondary)",
+    borderRadius: "var(--radius)",
+    color: "var(--text-secondary)",
+    "& fieldset": {
+      borderColor: "var(--background-tertiary)",
+      borderWidth: 1,
     },
-    '&:hover fieldset': {
-      borderColor: 'var(--accent)',
+    "&:hover fieldset": {
+      borderColor: "var(--background-tertiary)",
     },
-    '&.Mui-focused fieldset': {
-      borderColor: 'var(--accent)',
-      boxShadow: '0 0 0 2px var(--accent-light)',
+    "&.Mui-focused fieldset": {
+      borderColor: "var(--blue)",
     },
   },
-  '& .MuiInputLabel-root': {
+  "& .MuiInputLabel-root": {
     fontWeight: 500,
-    color: '#888',
-    '&.Mui-focused': {
-      color: 'var(--accent)',
+    color: "var(--text-secondary)",
+    "&.Mui-focused": {
+      color: "var(--accent)",
     },
+  },
+  "& .MuiInputAdornment-root": {
+    backgroundColor: "var(--background-secondary)",
+    color: "var(--text-secondary)",
+    width: 20,
+    height: 50,
   },
 });
 
-
 interface Props {
-  onChange: (e:string) => void
+  value: string;
+  onChange: (e: string) => void;
+  error: boolean;
 }
 
-export const TextFieldCustom = ({onChange}: Props) => {
+export const TextFieldCustom = ({ onChange, error, value }: Props) => {
+
   return (
     <CustomTextField
-      sx={{width: {xs: "90vw", sm: "60vw", md: "50vw", lg: "25vw"}}}
-      placeholder="Paste url to shorten"
+      InputProps={{
+        startAdornment: (
+          <InputAdornment
+            position="start"
+          >
+            <LinkIcon />
+          </InputAdornment>
+        ),
+      }}
+      error={error}
+      helperText={error ? "Please enter a valid URL" : ""}
+      sx={{ width: { xs: "100%" } }}
+      placeholder="Enter your URL here..."
       variant="outlined"
       onChange={(e) => onChange(e.target.value)}
+      value={value}
+
     />
   );
 };
