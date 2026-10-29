@@ -1,12 +1,12 @@
+import { Box, Typography } from "@mui/material";
 import { TextFieldCustom } from "./TextFieldCustom";
 import { CustomButton } from "./CustomButton";
-import { Grid } from "@mui/material";
 
 interface ShortenerProps {
   setUrl: (e: string) => void;
   loading: boolean;
-  handleSaveUrl: () => void;
-  error: boolean;
+  handleSaveUrl: (e?: React.FormEvent) => void;
+  error: string | null;
   url: string;
 }
 
@@ -18,22 +18,27 @@ export const Shortener = ({
   url,
 }: ShortenerProps) => {
   return (
-    <Grid
-      container
-      direction={"column"}
-      justifyContent={"center"}
-      alignItems={"center"}
-      gap={2}
-      padding={4}
-      sx={{
-        backgroundColor: "var(--primary-darker)",
-        border: "1px solid var(--background-secondary)",
-        borderRadius: "var(--radius)",
-        boxShadow: "0 0 10px 0 rgba(0, 0, 0, 0.1)",
-      }}
+    <Box
+      component="form"
+      noValidate
+      onSubmit={handleSaveUrl}
+      sx={{ display: "flex", flexDirection: "column", gap: 1.25 }}
     >
-      <TextFieldCustom onChange={(e) => setUrl(e)} error={error} value={url} />
-      <CustomButton loading={loading} handleSaveUrl={handleSaveUrl} />
-    </Grid>
+      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1.25 }}>
+        <TextFieldCustom onChange={setUrl} error={!!error} value={url} />
+        <CustomButton loading={loading} />
+      </Box>
+      <Typography
+        id="url-hint"
+        role="status"
+        sx={{
+          minHeight: 20,
+          fontSize: 14,
+          color: error ? "var(--danger)" : "var(--subtle)",
+        }}
+      >
+        {error ?? "Works with any http or https link."}
+      </Typography>
+    </Box>
   );
 };

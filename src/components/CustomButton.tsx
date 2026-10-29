@@ -1,59 +1,45 @@
-import { Button, CircularProgress, Grid, Typography } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 
 interface Props {
   loading: boolean;
-  handleSaveUrl: () => void;
 }
 
-export const CustomButton = ({ loading, handleSaveUrl }: Props) => {
+export const CustomButton = ({ loading }: Props) => {
   return (
     <Button
+      type="submit"
       variant="contained"
       disabled={loading}
-      onClick={() => !loading && handleSaveUrl()}
+      startIcon={
+        loading ? <CircularProgress size={18} color="inherit" /> : undefined
+      }
       sx={{
-        height: 55,
-        width: "100%",
-        borderRadius: "var(--radius)",
-        fontWeight: 600,
-        fontSize: 15,
+        height: 56,
+        minWidth: 150,
+        flex: { xs: "1 1 100%", sm: "0 0 auto" },
+        px: 3.5,
+        borderRadius: "var(--radius-control)",
+        fontWeight: 700,
+        fontSize: 16,
         textTransform: "none",
-        background:
-          "linear-gradient(to bottom right, var(--blue),var(--purple-secondary),var(--purple))",
+        background: "var(--accent)",
         color: "#fff",
-        boxShadow: "var(--shadow)",
-        px: 4,
+        boxShadow: "none",
+        transition: "filter 0.15s, transform 0.15s",
         "&:hover": {
-          background:
-            "linear-gradient(to bottom right, var(--blue-dark), var(--purple-secondary), var(--purple-dark))",
-          color: "#fff",
-          scale: 1.02,
-        },
-        "&:disabled": {
-          background: "var(--blue-dark)",
-          color: "var(--text-secondary)",
+          background: "var(--accent)",
           boxShadow: "none",
-          scale: 1,
+          filter: "brightness(1.12)",
         },
-        transition: "all 0.2s",
+        "&:active": { transform: "scale(0.98)" },
+        "&.Mui-disabled": {
+          background: "var(--accent)",
+          color: "#fff",
+          opacity: 0.75,
+        },
       }}
     >
-      {loading ? (
-        <Grid container alignItems="center" gap={1} justifyContent="center">
-          <CircularProgress size={20} color="inherit" />
-          <Typography
-            sx={{
-              fontSize: 12,
-              fontWeight: 600,
-              textTransform: "none",
-            }}
-          >
-            Shortening...
-          </Typography>
-        </Grid>
-      ) : (
-        "Shorten URL"
-      )}
+      {loading ? "Shortening…" : "Shorten URL"}
     </Button>
   );
 };

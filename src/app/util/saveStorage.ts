@@ -1,14 +1,28 @@
-interface SaveStorageProps {
-  url: string;
-  urlCode: string;
-}
+import { searchUrl } from "./getUrls";
+import type { SavedUrl } from "./types";
 
-export const handleSaveStorage = ({ url, urlCode }: SaveStorageProps) => {
-  const savedUrls = window.localStorage.getItem("savedUrls");
-  const savedUrlsArray = savedUrls ? JSON.parse(savedUrls) : [];
+const KEY = "savedUrls";
 
-  window.localStorage.setItem(
-    "savedUrls",
-    JSON.stringify([{ url, urlCode }, ...savedUrlsArray])
-  );
+const write = (urls: SavedUrl[]) => {
+  try {
+    window.localStorage.setItem(KEY, JSON.stringify(urls));
+  } catch {
+    // Storage unavailable (private mode, quota): the list just won't persist.
+  }
+};
+
+export const handleSaveStorage = (newUrl: SavedUrl) => {
+  write([newUrl, ...searchUrl().filter((u) => u.urlCode !== newUrl.urlCode)]);
+};
+
+export const removeFromStorage = (urlCode: string) => {
+  write(searchUrl().filter((u) => u.urlCode !== urlCode));
+};
+
+export const clearStorage = () => {
+  try {
+    window.localStorage.removeItem(KEY);
+  } catch {
+    // ignore
+  }
 };

@@ -1,45 +1,7 @@
-import { IconButton, InputAdornment, styled, TextField } from "@mui/material";
-import { Link as LinkIcon } from "@mui/icons-material";
-
-const CustomTextField = styled(TextField)({
-  "& .MuiInputBase-input": {
-    height: "55px",
-    fontSize: "0.9rem",
-    padding: "0 14px",
-    background: "var(--background-secondary)",
-    borderRadius: "var(--radius)",
-    boxShadow: "var(--shadow)",
-    transition: "box-shadow 0.2s",
-  },
-  "& .MuiOutlinedInput-root": {
-    backgroundColor: "var(--background-secondary)",
-    borderRadius: "var(--radius)",
-    color: "var(--text-secondary)",
-    "& fieldset": {
-      borderColor: "var(--background-tertiary)",
-      borderWidth: 1,
-    },
-    "&:hover fieldset": {
-      borderColor: "var(--background-tertiary)",
-    },
-    "&.Mui-focused fieldset": {
-      borderColor: "var(--blue)",
-    },
-  },
-  "& .MuiInputLabel-root": {
-    fontWeight: 500,
-    color: "var(--text-secondary)",
-    "&.Mui-focused": {
-      color: "var(--accent)",
-    },
-  },
-  "& .MuiInputAdornment-root": {
-    backgroundColor: "var(--background-secondary)",
-    color: "var(--text-secondary)",
-    width: 20,
-    height: 50,
-  },
-});
+import { Box, Button, IconButton, InputBase } from "@mui/material";
+import InsertLinkIcon from "@mui/icons-material/InsertLink";
+import ContentPasteIcon from "@mui/icons-material/ContentPaste";
+import CloseIcon from "@mui/icons-material/Close";
 
 interface Props {
   value: string;
@@ -48,26 +10,91 @@ interface Props {
 }
 
 export const TextFieldCustom = ({ onChange, error, value }: Props) => {
+  const handlePaste = async () => {
+    try {
+      const text = await navigator.clipboard.readText();
+      if (text) onChange(text.trim());
+    } catch {
+      // Clipboard permission denied: the user can still paste manually.
+    }
+  };
 
   return (
-    <CustomTextField
-      InputProps={{
-        startAdornment: (
-          <InputAdornment
-            position="start"
-          >
-            <LinkIcon />
-          </InputAdornment>
-        ),
+    <Box
+      sx={{
+        flex: "1 1 340px",
+        minWidth: 0,
+        height: 56,
+        display: "flex",
+        alignItems: "center",
+        gap: 1.25,
+        pl: 2,
+        pr: 1,
+        borderRadius: "var(--radius-control)",
+        background: "var(--field)",
+        border: `1px solid ${error ? "var(--danger-border)" : "var(--border-strong)"}`,
+        transition: "box-shadow 0.15s, border-color 0.15s",
+        "&:focus-within": {
+          borderColor: "var(--accent-text)",
+          boxShadow: "0 0 0 3px rgba(129, 140, 255, 0.35)",
+        },
       }}
-      error={error}
-      helperText={error ? "Please enter a valid URL" : ""}
-      sx={{ width: { xs: "100%" } }}
-      placeholder="Enter your URL here..."
-      variant="outlined"
-      onChange={(e) => onChange(e.target.value)}
-      value={value}
-
-    />
+    >
+      <InsertLinkIcon
+        sx={{ color: "var(--subtle)", rotate: "-45deg", flexShrink: 0 }}
+      />
+      <InputBase
+        fullWidth
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder="https://example.com/a-very-long-link"
+        inputProps={{
+          "aria-label": "URL to shorten",
+          "aria-invalid": error,
+          "aria-describedby": "url-hint",
+          inputMode: "url",
+          autoComplete: "off",
+          spellCheck: false,
+        }}
+        sx={{
+          color: "var(--text)",
+          fontSize: 16,
+          fontWeight: 500,
+          "& input::placeholder": { color: "var(--subtle)", opacity: 1 },
+        }}
+      />
+      {value ? (
+        <IconButton
+          aria-label="Clear"
+          onClick={() => onChange("")}
+          sx={{
+            width: 44,
+            height: 44,
+            color: "var(--muted)",
+            borderRadius: "10px",
+            "&:hover": { background: "var(--tile)", color: "var(--text)" },
+          }}
+        >
+          <CloseIcon fontSize="small" />
+        </IconButton>
+      ) : (
+        <Button
+          onClick={handlePaste}
+          startIcon={<ContentPasteIcon sx={{ fontSize: 16 }} />}
+          sx={{
+            height: 44,
+            px: 1.5,
+            color: "var(--muted)",
+            fontWeight: 600,
+            fontSize: 14,
+            textTransform: "none",
+            borderRadius: "10px",
+            "&:hover": { background: "var(--tile)", color: "var(--text)" },
+          }}
+        >
+          Paste
+        </Button>
+      )}
+    </Box>
   );
 };
